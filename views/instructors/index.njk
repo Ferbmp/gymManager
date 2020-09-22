@@ -3,26 +3,30 @@
 {% block content %}
 
     <div class="card table-container">
+        <a href="/instructors/create">Novo</a>
+
         <table width="100%">
             <thead>
                 <tr>
                     <th>Instructor</th>
-                    <th>Atendimento</th> 
-                    <th>Ação</th>                     
+                    <th>Atendimento</th>
+                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
-             {% for instructor in instructors %}
-                  <tr>
-                     <td>
-                        <span style= "background-image:url({{instructor.avatar_url}})"></span>
-                     {{instructor.name}}
-                     </td>
-                     <td>{{instructor.services}}</td>
-                     <td><a href="/instructors/{{instructor.id}}">Ver</a></td>     
-                  </tr>
-             {% endfor %}
-                   
+                {% for instructor in instructors %}
+                    <tr>
+                        <td>
+                            <span style= "background-image:url({{instructor.avatar_url}})"></span>
+                            {{instructor.name}}
+                        </td>
+                        <td>{{instructor.services}}</td>
+                        <td>
+                            <a href="/instructors/{{instructor.id}}">Ver</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+
             </tbody>
         </table>
     </div>

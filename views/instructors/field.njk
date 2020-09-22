@@ -1,19 +1,18 @@
+<div class="item">
+    <div> Avatar URL </div>
 
-   <div class="item">
-         <div> Avatar URL </div>
-
-         <div>
-             <input  
+    <div>
+        <input  
                 type="url"
                 name="avatar_url"
                 placeholder="http://"
                 value = "{{ instructor.avatar_url }}" 
             >
-         </div>
-
     </div>
 
-    <div class="item">
+</div>
+
+<div class="item">
     <div> Instrutor </div>
 
     <div>
@@ -24,28 +23,28 @@
             value = "{{ instructor.name }}" 
 
             >
-            
-    </div>
 
     </div>
 
-    <div class="item">
-        <div> Data de Nacimento </div>
-            <div>
-                <input
+</div>
+
+<div class="item">
+    <div> Data de Nacimento </div>
+    <div>
+        <input
                      type="date"
                      name='birth'
                       value = "{{ instructor.birth }}" 
 
                 >
-            </div>
     </div>
+</div>
 
-    <div class="item">
-        <div> Sexo </div>
-             <div>
-            <span>
-                <input type="radio" 
+<div class="item">
+    <div> Sexo </div>
+    <div>
+        <span>
+            <input type="radio" 
                 name="gender" 
                 value="M" 
                 {% if instructor.gender == "M" %}
@@ -53,8 +52,8 @@
                 {% endif %} >Masculino
                 </span>
 
-                <span>
-                <input 
+        <span>
+            <input 
                  type="radio" 
                 name="gender"
                  value="F"
@@ -63,22 +62,21 @@
                 {% endif %}
                   >Feminino
             </span>
-            </div>
-    </div>  
-    
+    </div>
+</div>
 
-    <div class="item">
+<div class="item">
     <div> Area de atuação </div>
-         <div>
-            <input 
+    <div>
+        <input 
             type="text" 
             name='services' 
             placeholder="Separe os serviços prestados por vírgula."
             value = "{{ instructor.services }}" 
             
             >
-        </div>
     </div>
+</div>
 
-   <button type="submit">Salvar</button></div>
-  
+<button type="submit">Salvar</button>
+</div>

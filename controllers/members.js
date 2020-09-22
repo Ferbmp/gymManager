@@ -1,49 +1,39 @@
 const fs = require('fs')
 const data = require("../data.json")
-const {age, date} = require('../utils')
+const { date } = require('../utils')
 
-exports.show = function(req,res){
-const { id } = req. params
+exports.index = function (req, res) {
+    return res.render("members/index", { members: data.members })
+}
 
-const foundMember = data.members.find(function(member){
-    return member.id == id
-})
+exports.show = function (req, res) {
+    const { id } = req.params
 
-    if(!foundMember) return res.send("Member not found!")
+    const foundMember = data.members.find(function (member) {
+        return member.id == id
+    })
 
-    function age(timestamp){
-        const today = new Date()
-        const birthDate = new Date(timestamp)
-    
-        let age = today.getFullYear() - birthDate.getFullYear()
-        const month = today.getMonth() - birthDate.getMonth()
-    
-        if (month< 0 || month == 0 && today.getDate() < birthDate.getDate()) {
-            age = age - 1
-        }
-    
-        return age
-      }
-      
+    if (!foundMember) return res.send("Member not found!")
+
+
     const member = {
         ...foundMember,
 
-        age: age(foundMember.birth),     
+        birth: date(foundMember.birth).birthDay
     }
-    
-    
+
+
     return res.render("members/show", { member })
 }
 
-
-exports.create = function(req,res){
+exports.create = function (req, res) {
     return res.render('members/create')
 }
 
 exports.post = function (req, res) {
 
- //req.query
- //req.body
+    //req.query
+    //req.body
 
     const keys = Object.keys(req.body)
 
@@ -53,26 +43,35 @@ exports.post = function (req, res) {
         }
     }
 
-    let {avatar_url, birth, name, services, gender} = req.body
+    // let {
+    //     avatar_url, 
+    //     birth, 
+    //     name,
+    //     blood,
+    //     email,
+    //     weight,
+    //     height,
+    //     gender,} = req.body
 
 
-    birth = Date.parse(birth)
-    const created_at = Date.now()
-    const id = Number(data.members.length + 1)
-    
+    birth = Date.parse(req.body.birth)
+
+    let id = 1
+    const lastMember = data.members[data.members.length - 1]
+
+    if (lastMember) {
+        id = lastMember.id + 1
+    }
+
 
     data.members.push({
         id,
-        name,
-        avatar_url,
-        birth,
-        gender,
-        services,
-        created_at
+        ...req.body,
+        birth
     })
 
-    fs.writeFile("data.json", JSON.stringify(data, null, 2), function(err){
-        if(err) return res.send('Write File Error')
+    fs.writeFile("data.json", JSON.stringify(data, null, 2), function (err) {
+        if (err) return res.send('Write File Error')
 
         return res.redirect("/members")
     })
@@ -80,62 +79,60 @@ exports.post = function (req, res) {
     // return res.send(req.body)
 }
 
-exports.index = function (req,res) {
-    return res.render("members/index", {members:data.members})
-}
+
 //edit
 
-exports.edit = function(req,res){
+exports.edit = function (req, res) {
     //req params
-    const { id } = req. params
+    const { id } = req.params
 
-const foundMember = data.members.find(function(member){
-    return member.id == id
-})
+    const foundMember = data.members.find(function (member) {
+        return member.id == id
+    })
 
-    if(!foundMember) return res.send("Member not found!")
+    if (!foundMember) return res.send("Member not found!")
 
     const member = {
         ...foundMember,
-        birth: date(foundMember.birth)
+        birth: date(foundMember.birth).iso
     }
 
-   
+
 
 
     return res.render("members/edit", { member })
 }
 
 //put
-exports.put = function(req,res){
-    
+exports.put = function (req, res) {
+
     const { id } = req.body
     let index = 0
 
-    const foundMember = data.members.find(function(member, foundIndex){
-        
-        if (id == member.id){
+    const foundMember = data.members.find(function (member, foundIndex) {
+
+        if (id == member.id) {
             index = foundIndex
             return true
         }
 
     })
-    
-        if(!foundMember) return res.send("Member not found!")
+
+    if (!foundMember) return res.send("Member not found!")
 
     const member = {
         ...foundMember,
         ...req.body,
         birth: Date.parse(req.body.birth),
-        id: Number (req.body.id)
+        id: Number(req.body.id)
     }
 
 
     data.members[index] = member
 
-    fs.writeFile ("data.json", JSON.stringify(data, null, 2), function(err) {
+    fs.writeFile("data.json", JSON.stringify(data, null, 2), function (err) {
 
-        if(err) return res.send("Write error!")
+        if (err) return res.send("Write error!")
 
         return res.redirect(`/members/${id}`)
     })
@@ -144,17 +141,17 @@ exports.put = function(req,res){
 
 //delete
 
-exports.delete = function(req,res){
-    const {id} = req.body
+exports.delete = function (req, res) {
+    const { id } = req.body
 
-    const filteredMembers = data.members.filter(function(member){
+    const filteredMembers = data.members.filter(function (member) {
 
         return member.id != id
     })
-        
+
     data.members = filteredMembers
 
-    fs.writeFile("data.json", JSON.stringify(data, null, 2), function(err){
+    fs.writeFile("data.json", JSON.stringify(data, null, 2), function (err) {
         if (err) return res.send("Write file error!")
 
         return res.redirect("/members")
