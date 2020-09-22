@@ -1,16 +1,9 @@
-const modalOverlay = document.querySelector('.modal-overlay');
-const cards = document.querySelectorAll('.card')
+const currentPage = location.pathname
+const menuItems = document.querySelectorAll("header .links a")
 
-for (let card of cards) {
-    card.addEventListener("click", function () {
-        const videoID = card.getAttribute("id")
-        modalOverlay.classList.add("active")
-        modalOverlay.querySelector("iframe").src = `https://www.youtube.com/embed/${videoID}`
-
-    })
+for (item of menuItems) {
+    if (currentPage.includes(item.getAttribute("href"))) 
+    {
+        item.classList.add("active")
+    }
 }
-
-document.querySelector(".close-modal").addEventListener("click", function () {
-    modalOverlay.classList.remove("active")
-    modalOverlay.querySelector("iframe").src =""
-})
